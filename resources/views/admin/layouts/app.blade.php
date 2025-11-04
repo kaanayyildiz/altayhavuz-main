@@ -30,7 +30,7 @@
             </a>
             <a href="{{ route('admin.portfolio-categories.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 {{ request()->is('admin/portfolio-categories*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-700' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                <span>Portfolio Kategoriler</span>
+                <span>Portfolyo Kategoriler</span>
             </a>
             <a href="{{ route('admin.menus.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 {{ request()->is('admin/menus*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-700' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h13M3 6h1m-1 6h1m4 0h13M3 18h1m4 0h13"/></svg>
@@ -139,7 +139,7 @@
             @yield('content')
         </main>
     </div>
-    
+
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

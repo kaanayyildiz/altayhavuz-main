@@ -8,10 +8,33 @@
     <form action="{{ route('admin.portfolios.update', $portfolio) }}" method="POST" enctype="multipart/form-data" class="bg-white border rounded-xl p-6 space-y-5 max-w-2xl">
         @csrf
         @method('PUT')
-        <div>
+        <div x-data="{fileName: '', preview: '', onChange(e){ const f=e.target.files[0]; if(!f) { this.fileName=''; this.preview=''; return;} this.fileName=f.name; if(f.type.startsWith('image/')) { this.preview = URL.createObjectURL(f); } } }">
             <label class="block text-sm font-medium text-gray-700 mb-2">Mevcut Görsel</label>
-            <img src="{{ asset('storage/'.$portfolio->image_path) }}" class="h-24 w-40 object-cover rounded mb-2">
-            <input type="file" name="image" accept="image/*" class="w-full">
+            <div class="flex items-start gap-4">
+                <div class="w-[160px] h-[96px] bg-gray-100 rounded overflow-hidden flex items-center justify-center">
+                    <template x-if="preview">
+                        <img :src="preview" alt="preview" class="w-full h-full object-cover">
+                    </template>
+                    <template x-if="!preview">
+                        <img src="{{ asset('storage/'.$portfolio->image_path) }}" class="w-full h-full object-cover">
+                    </template>
+                </div>
+                <div class="flex-1">
+                    <label class="relative flex flex-col items-center justify-center w-full border-2 border-dashed rounded-xl p-4 cursor-pointer transition bg-white hover:bg-slate-50 border-slate-300 hover:border-blue-400">
+                        <div class="text-center">
+                            <div class="mx-auto mb-2 w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            </div>
+                            <div class="text-sm text-gray-700"><span class="font-semibold text-blue-700">Yeni görsel seç</span> veya sürükleyip bırak</div>
+                            <div class="text-xs text-gray-500 mt-1">PNG, JPG (max 4MB)</div>
+                        </div>
+                        <input type="file" name="image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" @change="onChange($event)">
+                    </label>
+                    <template x-if="fileName">
+                        <div class="mt-2 text-sm text-gray-700">Seçilen: <span class="font-medium" x-text="fileName"></span></div>
+                    </template>
+                </div>
+            </div>
             @error('image')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

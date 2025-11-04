@@ -9,7 +9,7 @@
             <div class="text-3xl font-extrabold">{{ \App\Models\Slider::count() }}</div>
         </div>
         <div class="bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition">
-            <div class="text-sm text-gray-500 mb-2">Portfolyo</div>
+            <div class="text-sm text-gray-500 mb-2">Portfolio</div>
             <div class="text-3xl font-extrabold">{{ \App\Models\Portfolio::count() }}</div>
         </div>
         <div class="bg-white rounded-2xl border p-6 shadow-sm hover:shadow-md transition">

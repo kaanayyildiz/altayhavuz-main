@@ -27,9 +27,34 @@
                 @error('status')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
             </div>
         </div>
-        <div>
+        <div x-data="{fileName: '', preview: '', onChange(e){ const f=e.target.files[0]; if(!f) { this.fileName=''; this.preview=''; return;} this.fileName=f.name; if(f.type.startsWith('image/')) { this.preview = URL.createObjectURL(f); } } }">
             <label class="block text-sm font-medium text-gray-700 mb-2">Görsel</label>
-            <input type="file" name="image" accept="image/*" class="w-full">
+            <label class="relative flex flex-col items-center justify-center w-full border-2 border-dashed rounded-xl p-6 cursor-pointer transition bg-white hover:bg-slate-50 border-slate-300 hover:border-blue-400">
+                <div class="text-center">
+                    <div class="mx-auto mb-3 w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    </div>
+                    <div class="text-sm text-gray-700"><span class="font-semibold text-blue-700">Yüklemek için tıkla</span> veya sürükleyip bırak</div>
+                    <div class="text-xs text-gray-500 mt-1">PNG, JPG (max 4MB)</div>
+                </div>
+                <input type="file" name="image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" @change="onChange($event)">
+            </label>
+            <template x-if="fileName">
+                <div class="mt-3 flex items-center gap-3">
+                    <div class="w-20 h-14 bg-gray-100 rounded overflow-hidden flex items-center justify-center">
+                        <template x-if="preview">
+                            <img :src="preview" alt="preview" class="w-full h-full object-cover">
+                        </template>
+                        <template x-if="!preview">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1-1a2 2 0 012.828 0L20 14M7 8h10M7 12h4"/></svg>
+                        </template>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="text-sm font-medium text-gray-800 truncate" x-text="fileName"></div>
+                        <div class="text-xs text-gray-500">Seçildi</div>
+                    </div>
+                </div>
+            </template>
             @error('image')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
         </div>
         <div class="flex items-center gap-3">
