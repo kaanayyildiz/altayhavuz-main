@@ -587,22 +587,21 @@
                         class="text-lg transition-all">
                     {{ __('messages.filter_all') }}
                 </button>
-                <button @click="activeFilter = 'open'"
-                        :class="activeFilter === 'open' ? 'text-blue-700 font-semibold border-b-2 border-blue-700 pb-1' : 'text-gray-600 hover:text-gray-800'"
-                        class="text-lg transition-all">
-                    {{ __('messages.filter_open_pool') }}
-                </button>
-                <button @click="activeFilter = 'closed'"
-                        :class="activeFilter === 'closed' ? 'text-blue-700 font-semibold border-b-2 border-blue-700 pb-1' : 'text-gray-600 hover:text-gray-800'"
-                        class="text-lg transition-all">
-                    {{ __('messages.filter_closed_pool') }}
-                </button>
+                @foreach($portfolioCategories as $cat)
+                    @php($catId = 'cat-'.$cat->id)
+                    <button @click="activeFilter = '{{ $catId }}'"
+                            :class="activeFilter === '{{ $catId }}' ? 'text-blue-700 font-semibold border-b-2 border-blue-700 pb-1' : 'text-gray-600 hover:text-gray-800'"
+                            class="text-lg transition-all">
+                        {{ app()->getLocale()==='tr' ? $cat->name_tr : ($cat->name_en ?? $cat->name_tr) }}
+                    </button>
+                @endforeach
             </div>
 
             <!-- Portfolio Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 @foreach($portfolios as $p)
-                    <div x-show="activeFilter === 'all' || activeFilter === '{{ $p->type }}'"
+                    @php($pf = 'cat-'.($p->portfolio_category_id ?? 0))
+                    <div x-show="activeFilter === 'all' || activeFilter === '{{ $pf }}'"
                          x-transition:enter="transition ease-out duration-300"
                          x-transition:enter-start="opacity-0 transform scale-95"
                          x-transition:enter-end="opacity-100 transform scale-100"
@@ -619,6 +618,13 @@
                                  alt="{{ app()->getLocale()==='tr' ? ($p->title_tr ?? '') : ($p->title_en ?? ($p->title_tr ?? '')) }}"
                                  class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500">
                             <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300"></div>
+                            <div class="pointer-events-none absolute inset-0 flex items-center justify-center p-4">
+                                <div class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 text-center">
+                                    <div class="inline-block bg-black/60 backdrop-blur-sm text-white text-sm sm:text-base md:text-lg font-semibold rounded px-3 py-2">
+                                        {{ app()->getLocale()==='tr' ? ($p->title_tr ?? '') : ($p->title_en ?? ($p->title_tr ?? '')) }}
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 @endforeach

@@ -25,7 +25,7 @@ class PortfolioController extends Controller
         $validated = $request->validate([
             'title_tr' => 'nullable|string|max:255',
             'title_en' => 'nullable|string|max:255',
-            'type' => 'required|in:open,closed',
+            'portfolio_category_id' => 'required|integer|exists:portfolio_categories,id',
             'status' => 'required|in:active,passive',
             'image' => 'required|image|max:4096',
         ]);
@@ -33,7 +33,7 @@ class PortfolioController extends Controller
         $data = [
             'title_tr' => $validated['title_tr'] ?? null,
             'title_en' => $validated['title_en'] ?? null,
-            'type' => $validated['type'],
+            'portfolio_category_id' => $validated['portfolio_category_id'],
             'status' => $validated['status'],
         ];
 
@@ -53,7 +53,7 @@ class PortfolioController extends Controller
         $validated = $request->validate([
             'title_tr' => 'nullable|string|max:255',
             'title_en' => 'nullable|string|max:255',
-            'type' => 'required|in:open,closed',
+            'portfolio_category_id' => 'required|integer|exists:portfolio_categories,id',
             'status' => 'required|in:active,passive',
             'image' => 'nullable|image|max:4096',
         ]);
@@ -61,7 +61,7 @@ class PortfolioController extends Controller
         $data = [
             'title_tr' => $validated['title_tr'] ?? null,
             'title_en' => $validated['title_en'] ?? null,
-            'type' => $validated['type'],
+            'portfolio_category_id' => $validated['portfolio_category_id'],
             'status' => $validated['status'],
         ];
 

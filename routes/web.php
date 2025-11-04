@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\SliderController as AdminSliderController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
+use App\Http\Controllers\Admin\PortfolioCategoryController as AdminPortfolioCategoryController;
 use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\LanguageController as AdminLanguageController;
 use App\Http\Controllers\Admin\SeoController as AdminSeoController;
@@ -56,6 +57,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Posts removed from admin
         Route::resource('portfolios', AdminPortfolioController::class);
         Route::post('portfolios/reorder', [AdminPortfolioController::class, 'reorder'])->name('portfolios.reorder');
+        Route::resource('portfolio-categories', AdminPortfolioCategoryController::class)->parameters([
+            'portfolio-categories' => 'portfolio_category'
+        ])->except(['show']);
+        Route::post('portfolio-categories/reorder', [AdminPortfolioCategoryController::class, 'reorder'])->name('portfolio_categories.reorder');
         Route::resource('offers', AdminOfferController::class)->only(['index', 'destroy']);
 
         Route::post('offers/bulk-delete', [AdminOfferController::class, 'bulkDelete'])->name('offers.bulkDelete');

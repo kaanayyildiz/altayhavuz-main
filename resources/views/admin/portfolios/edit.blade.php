@@ -16,12 +16,24 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Tür</label>
-                <select name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="open" {{ old('type', $portfolio->type)==='open'?'selected':'' }}>Açık Havuz</option>
-                    <option value="closed" {{ old('type', $portfolio->type)==='closed'?'selected':'' }}>Kapalı Havuz</option>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Başlık (TR)</label>
+                <input type="text" name="title_tr" value="{{ old('title_tr', $portfolio->title_tr) }}" placeholder="Örn: Villa Havuzu" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                @error('title_tr')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Başlık (EN)</label>
+                <input type="text" name="title_en" value="{{ old('title_en', $portfolio->title_en) }}" placeholder="e.g., Villa Pool" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                @error('title_en')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                <select name="portfolio_category_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    @php($cats = \App\Models\PortfolioCategory::where('status','active')->orderBy('order')->orderByDesc('id')->get())
+                    @foreach($cats as $cat)
+                        <option value="{{ $cat->id }}" {{ old('portfolio_category_id', $portfolio->portfolio_category_id)==$cat->id?'selected':'' }}>{{ app()->getLocale()==='tr' ? $cat->name_tr : ($cat->name_en ?? $cat->name_tr) }}</option>
+                    @endforeach
                 </select>
-                @error('type')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
+                @error('portfolio_category_id')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

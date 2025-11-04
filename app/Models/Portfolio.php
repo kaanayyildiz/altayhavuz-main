@@ -10,8 +10,13 @@ class Portfolio extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title_tr', 'title_en', 'image_path', 'type', 'status', 'order',
+        'title_tr', 'title_en', 'image_path', 'portfolio_category_id', 'status', 'order',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(PortfolioCategory::class, 'portfolio_category_id');
+    }
 }
 
 
