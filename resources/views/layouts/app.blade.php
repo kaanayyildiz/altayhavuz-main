@@ -5,7 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', __('messages.app_name'))</title>
+    <?php
+        $currentPath = request()->getPathInfo();
+        $currentUrl = url()->current();
+        $pathVariants = array_values(array_unique([
+            $currentPath,
+            rtrim($currentPath, '/').'/',$currentPath === '/' ? '/' : '/'.ltrim($currentPath,'/'),
+        ]));
+        $menuSeo = \App\Models\Menu::whereIn('url', $pathVariants)->first();
+        if (!$menuSeo) {
+            $menuSeo = \App\Models\Menu::where('url', $currentUrl)->first();
+        }
+        if (!$menuSeo && ($currentPath === '' || $currentPath === '/')) {
+            $menuSeo = \App\Models\Menu::where('url', '/')->first();
+        }
+        $defaultTitle = \App\Models\Setting::get('seo_title_default', config('app.name'));
+        $defaultDescription = \App\Models\Setting::get('seo_description_default', '');
+        $defaultKeywords = \App\Models\Setting::get('seo_keywords_default', '');
+        $metaTitle = trim($menuSeo->seo_title ?? '') ?: $defaultTitle;
+        $metaDescription = trim($menuSeo->seo_description ?? '') ?: $defaultDescription;
+        $metaKeywords = trim($menuSeo->seo_keywords ?? '') ?: $defaultKeywords;
+    ?>
+    <title>@yield('title', $metaTitle)</title>
+    @if(!empty($metaDescription))
+        <meta name="description" content="{{ $metaDescription }}">
+    @endif
+    @if(!empty($metaKeywords))
+        <meta name="keywords" content="{{ $metaKeywords }}">
+    @endif
+    <?php
+        $ogTitleDefault = \App\Models\Setting::get('og_title_default', '');
+        $ogDescriptionDefault = \App\Models\Setting::get('og_description_default', '');
+        $ogTypeDefault = \App\Models\Setting::get('og_type_default', 'website');
+        $ogSiteNameDefault = \App\Models\Setting::get('og_site_name_default', '');
+        $ogImageDefault = \App\Models\Setting::get('og_image_default', '');
+        
+        $ogTitle = trim($ogTitleDefault) ?: $metaTitle;
+        $ogDescription = trim($ogDescriptionDefault) ?: $metaDescription;
+        $ogImage = ($menuSeo && trim($menuSeo->og_image ?? '') !== '') ? $menuSeo->og_image : ($ogImageDefault ?: asset('altayhavuzlogo.png'));
+    ?>
+    <meta property="og:title" content="{{ $ogTitle }}">
+    @if(!empty($ogDescription))
+        <meta property="og:description" content="{{ $ogDescription }}">
+    @endif
+    <meta property="og:type" content="{{ $ogTypeDefault }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    @if(!empty($ogSiteNameDefault))
+        <meta property="og:site_name" content="{{ $ogSiteNameDefault }}">
+    @endif
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

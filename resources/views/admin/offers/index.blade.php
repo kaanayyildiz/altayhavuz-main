@@ -7,7 +7,7 @@
         <h1 class="text-2xl font-bold">Teklifler</h1>
     </div>
 
-    <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-lg border border-slate-200 overflow-hidden overflow-x-auto">
         <form method="POST" action="" x-data="{ all:false }" @change="if($event.target.id==='select_all'){ document.querySelectorAll('.offer-checkbox').forEach(cb=> cb.checked=$event.target.checked) }">
             @csrf
             <div class="flex items-center justify-between p-3 border-b bg-slate-50">

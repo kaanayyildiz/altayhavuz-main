@@ -8,7 +8,7 @@
         <a href="{{ route('admin.categories.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Yeni Kategori</a>
     </div>
 
-    <div class="bg-white border rounded-xl overflow-hidden">
+    <div class="bg-white border rounded-xl overflow-hidden overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>

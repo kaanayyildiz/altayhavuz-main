@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin - ' . __('messages.app_name'))</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>[x-cloak]{display:none!important}</style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-slate-100 text-gray-900" x-data="{ sidebarOpen: false }">
 <div class="min-h-screen">
@@ -31,6 +32,10 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h13M3 6h1m-1 6h1m4 0h13M3 18h1m4 0h13"/></svg>
                 <span>Menüler</span>
             </a>
+            <a href="{{ route('admin.seo.edit') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 {{ request()->is('admin/seo') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-700' }}">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 18a8 8 0 110-16 8 8 0 010 16z"/></svg>
+                <span>SEO Yönetimi</span>
+            </a>
             <a href="{{ route('admin.offers.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 {{ request()->is('admin/offers*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-700' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h8M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 <span>Teklifler</span>
@@ -52,8 +57,8 @@
 
     <!-- Mobile Sidebar -->
     <div class="md:hidden">
-        <div x-show="sidebarOpen" x-transition.opacity class="fixed inset-0 bg-black/40 z-30" @click="sidebarOpen=false"></div>
-        <div x-show="sidebarOpen"
+        <div x-show="sidebarOpen" x-cloak x-transition.opacity class="fixed inset-0 bg-black/40 z-30" @click="sidebarOpen=false"></div>
+        <div x-show="sidebarOpen" x-cloak
              x-transition:enter="transition transform ease-out duration-300"
              x-transition:enter-start="-translate-x-full"
              x-transition:enter-end="translate-x-0"
@@ -83,6 +88,10 @@
                 <a href="{{ route('admin.menus.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 {{ request()->is('admin/menus*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-700' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h13M3 6h1m-1 6h1m4 0h13M3 18h1m4 0h13"/></svg>
                     <span>Menüler</span>
+                </a>
+                <a href="{{ route('admin.seo.edit') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 {{ request()->is('admin/seo') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-700' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 18a8 8 0 110-16 8 8 0 010 16z"/></svg>
+                    <span>SEO Yönetimi</span>
                 </a>
                 <a href="{{ route('admin.offers.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 {{ request()->is('admin/offers*') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-700' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h8M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
@@ -125,6 +134,7 @@
     
 </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 <script>
     (function(){
         function disableAutocomplete(){

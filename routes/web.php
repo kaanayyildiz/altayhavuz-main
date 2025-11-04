@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\LanguageController as AdminLanguageController;
+use App\Http\Controllers\Admin\SeoController as AdminSeoController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\Admin\OfferController as AdminOfferController;
 
@@ -63,6 +64,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
         Route::post('settings', [AdminSettingController::class, 'update'])->name('settings.update');
+
+        // SEO Management
+        Route::get('seo', [AdminSeoController::class, 'edit'])->name('seo.edit');
+        Route::post('seo', [AdminSeoController::class, 'update'])->name('seo.update');
 
         Route::get('languages', [AdminLanguageController::class, 'index'])->name('languages.index');
         Route::get('languages/{locale}/edit', [AdminLanguageController::class, 'edit'])->name('languages.edit');

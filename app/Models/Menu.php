@@ -11,6 +11,7 @@ class Menu extends Model
 
     protected $fillable = [
         'title_tr', 'title_en', 'url', 'order', 'status',
+        'seo_title', 'seo_description', 'seo_keywords', 'og_image',
     ];
 }
 
