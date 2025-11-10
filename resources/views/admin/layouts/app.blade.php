@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Admin - ' . __('messages.app_name'))</title>
+    <title>@yield('title', 'Admin - ' . config('app.name'))</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>[x-cloak]{display:none!important}</style>
 </head>

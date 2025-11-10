@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Teklifler - ' . __('messages.app_name'))
+@section('title', 'Teklifler - ' . config('app.name'))
 
 @section('content')
     <div class="flex items-center justify-between mb-6">

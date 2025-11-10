@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
                 }
                 if ($locale) {
                     app()->setLocale($locale);
+                    config(['app.locale' => $locale]);
                 }
             }
 

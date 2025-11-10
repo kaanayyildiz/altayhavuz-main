@@ -19,10 +19,10 @@ class DashboardController extends Controller
             'last_7_days_visits' => Visitor::getLast7DaysVisits(),
         ];
 
-        // Son 50 ziyaretçiyi getir
-        $recentVisitors = Visitor::orderBy('created_at', 'desc')
-            ->limit(50)
-            ->get();
+        // Son ziyaretçileri sayfalı olarak getir
+        $recentVisitors = Visitor::orderBy('visited_at', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
         // Google Analytics ID
         $googleAnalyticsId = Setting::get('google_analytics_id', '');

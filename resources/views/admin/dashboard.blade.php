@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Admin Dashboard - ' . __('messages.app_name'))
+@section('title', 'Admin Dashboard - ' . config('app.name'))
 
 @section('content')
     <!-- Google Analytics Bilgisi -->
@@ -181,6 +181,11 @@
                     </tbody>
                 </table>
             </div>
+            @if($recentVisitors instanceof \Illuminate\Contracts\Pagination\Paginator && $recentVisitors->hasPages())
+                <div class="px-6 py-4 border-t bg-gray-50">
+                    {{ $recentVisitors->withQueryString()->links() }}
+                </div>
+            @endif
         </div>
     </div>
 @endsection

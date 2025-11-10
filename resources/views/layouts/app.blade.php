@@ -421,7 +421,7 @@
                 </div>
 
                 <div class="mt-12 border-t border-white/15 pt-6 text-center text-sm text-blue-50/80">
-                    <p>&copy; {{ date('Y') }} {{ __('messages.app_name') }} · Tüm hakları saklıdır.</p>
+                    <p>&copy; {{ date('Y') }} {{ config('app.name') }} · Tüm hakları saklıdır.</p>
                 </div>
             </div>
             <img src="{{ asset('footer02.png') }}" alt="Havuz merdiveni" class="pool-footer-visual">

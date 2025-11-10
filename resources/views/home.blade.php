@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('messages.app_name') . ' - ' . __('messages.home'))
+@section('title', config('app.name') . ' - ' . __('messages.home'))
 
 @section('content')
     <!-- Hero Slider with Swipe Support -->

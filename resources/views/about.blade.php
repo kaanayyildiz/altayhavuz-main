@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('messages.app_name') . ' - ' . __('messages.about'))
+@section('title', config('app.name') . ' - ' . __('messages.about'))
 
 @section('content')
     <!-- Hero Section -->
