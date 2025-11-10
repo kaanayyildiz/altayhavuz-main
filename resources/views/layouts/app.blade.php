@@ -39,7 +39,7 @@
         $ogTypeDefault = \App\Models\Setting::get('og_type_default', 'website');
         $ogSiteNameDefault = \App\Models\Setting::get('og_site_name_default', '');
         $ogImageDefault = \App\Models\Setting::get('og_image_default', '');
-        
+
         $ogTitle = trim($ogTitleDefault) ?: $metaTitle;
         $ogDescription = trim($ogDescriptionDefault) ?: $metaDescription;
         $ogImage = ($menuSeo && trim($menuSeo->og_image ?? '') !== '') ? $menuSeo->og_image : ($ogImageDefault ?: asset('altayhavuzlogo.png'));
@@ -84,7 +84,7 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
-        
+
         /* Parıltı efekti için animasyon */
         @keyframes shimmer {
             0% {
@@ -94,12 +94,12 @@
                 transform: translateX(200%) skewX(-15deg);
             }
         }
-        
+
         .shimmer-button {
             position: relative;
             overflow: hidden;
         }
-        
+
         .shimmer-button::before {
             content: '';
             position: absolute;
@@ -111,9 +111,66 @@
             transform: translateX(-100%) skewX(-15deg);
             transition: transform 0.6s;
         }
-        
+
         .shimmer-button:hover::before {
             animation: shimmer 0.8s ease-in-out;
+        }
+        .pool-footer {
+            position: relative;
+            border-top-left-radius: 140px;
+            border-top-right-radius: 140px;
+            background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.15), transparent 55%),
+                        radial-gradient(circle at 80% 0%, rgba(255,255,255,0.2), transparent 45%),
+                        linear-gradient(135deg, #2193ff 0%, #0f75ff 50%, #0a5cd9 100%);
+        }
+
+        .pool-footer::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 10%, rgba(255,255,255,0.18) 0%, transparent 55%),
+                radial-gradient(circle at 80% 15%, rgba(255,255,255,0.15) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='600' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' x2='0' y1='0' y2='1'%3E%3Cstop stop-color='%23ffffff' stop-opacity='0.24' offset='0'/%3E%3Cstop stop-color='%23ffffff' stop-opacity='0' offset='1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 60c40 10 80-10 120 0s80 10 120 0 80-10 120 0 80 10 120 0 80-10 120 0v340H0z' fill='url(%23a)' opacity='.45'/%3E%3C/svg%3E");
+            background-size: 100% 100%, 100% 100%, 120% 120%;
+            background-position: center;
+            background-repeat: no-repeat;
+            mix-blend-mode: screen;
+            opacity: 0.85;
+        }
+
+        .pool-footer::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 120%, rgba(12, 60, 150, 0.55), transparent 65%);
+            pointer-events: none;
+        }
+
+        .pool-footer-visual {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: clamp(160px, 18vw, 260px);
+            pointer-events: none;
+            filter: drop-shadow(0 20px 35px rgba(0, 35, 120, 0.35));
+        }
+
+        @media (max-width: 1024px) {
+            .pool-footer-visual {
+                right: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .pool-footer {
+                border-top-left-radius: 90px;
+                border-top-right-radius: 90px;
+            }
+
+            .pool-footer-visual {
+                display: none;
+            }
         }
     </style>
     <!-- Fancybox CSS -->
@@ -141,8 +198,8 @@
                 </div>
                 <div class="flex items-center space-x-3 sm:space-x-4 flex-shrink-0">
                     <div class="flex items-center space-x-2">
-                        <svg class="w-4 h-4 text-blue-700 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0a4 4 0 10-8 0 4 4 0 008 0z"/>
+                        <svg class="w-4 h-4 text-blue-700 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.75 5.25L3 6V18L3.75 18.75H20.25L21 18V6L20.25 5.25H3.75ZM4.5 7.6955V17.25H19.5V7.69525L11.9999 14.5136L4.5 7.6955ZM18.3099 6.75H5.68986L11.9999 12.4864L18.3099 6.75Z"/>
                         </svg>
                         <span class="truncate sm:whitespace-nowrap">info@altayhavuz.com</span>
                     </div>
@@ -291,64 +348,85 @@
     @endif
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <div class="mb-4">
-                        <img src="{{ asset('altayhavuzlogo.png') }}" alt="Altay Havuz" class="h-10 w-auto object-contain">
+    @php
+        $instagramUrl = \App\Models\Setting::get('instagram_url', '');
+        $youtubeUrl = \App\Models\Setting::get('youtube_url', '');
+    @endphp
+    <section class="relative mt-32">
+        <footer class="pool-footer text-white pt-32 pb-12">
+            <div class="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+                <div class="flex flex-col lg:flex-row items-center lg:items-start gap-10 lg:gap-16">
+                    <div class="flex-1 text-center lg:text-left">
+                        <div class="flex justify-center lg:justify-start">
+                            <img src="{{ asset('altayhavuzlogo.png') }}" alt="Altay Havuz" class="h-16 w-auto object-contain drop-shadow-lg">
+                        </div>
+                        <p class="mt-6 text-sm sm:text-base text-blue-50/80 max-w-md mx-auto lg:mx-0">
+                            Müşterilerimizin memnuniyeti için titizlikle çalışıyor, havuz hayallerini gerçeğe dönüştürüyoruz.
+                        </p>
+                        <div class="mt-6 flex justify-center lg:justify-start gap-3">
+                            @if($instagramUrl)
+                                <a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center transition">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm10 1a1 1 0 100 2 1 1 0 000-2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+                                    </svg>
+                                </a>
+                            @endif
+                            @if($youtubeUrl)
+                                <a href="{{ $youtubeUrl }}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center transition">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M23.498 6.186a3.002 3.002 0 0 0-2.118-2.127C19.502 3.55 12 3.55 12 3.55s-7.502 0-9.38.509A3.002 3.002 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.003 3.003 0 0 0 2.118 2.127c1.878.508 9.38.508 9.38.508s7.502 0 9.38-.508a3.003 3.003 0 0 0 2.118-2.127C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.75 15.5v-7L15.5 12l-5.75 3.5z"/>
+                                    </svg>
+                                </a>
+                            @endif
+                            @if(!$instagramUrl && !$youtubeUrl)
+                                <span class="text-blue-50/80 text-sm">Sosyal medya hesaplarımız yakında.</span>
+                            @endif
+                        </div>
                     </div>
-                    <h3 class="text-lg font-semibold mb-4">Sosyal Medyada Biz</h3>
-                    <div class="flex items-center gap-4">
-                        @php
-                            $instagramUrl = \App\Models\Setting::get('instagram_url', '');
-                            $youtubeUrl = \App\Models\Setting::get('youtube_url', '');
-                        @endphp
-                        @if($instagramUrl)
-                            <a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-pink-500 transition-colors duration-200">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                                </svg>
-                            </a>
-                        @endif
-                        @if($youtubeUrl)
-                            <a href="{{ $youtubeUrl }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-red-500 transition-colors duration-200">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                                </svg>
-                            </a>
-                        @endif
-                        @if(!$instagramUrl && !$youtubeUrl)
-                            <p class="text-gray-400 text-sm">Sosyal medya hesapları henüz eklenmedi.</p>
-                        @endif
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-10 flex-[1.3] w-full">
+                        <div>
+                            <h4 class="text-lg font-semibold tracking-wide">Hızlı Bağlantılar</h4>
+                            <ul class="mt-4 space-y-3 text-blue-50/80">
+                                <li><a href="{{ route('home') }}" class="hover:text-white transition">Anasayfa</a></li>
+                                <li><a href="{{ route('services') }}" class="hover:text-white transition">Hizmetler</a></li>
+                                <li><a href="{{ route('about') }}" class="hover:text-white transition">Hakkımızda</a></li>
+                                <li><a href="{{ route('contact') }}" class="hover:text-white transition">İletişim</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold tracking-wide">İletişim</h4>
+                            <ul class="mt-4 space-y-3 text-blue-50/80">
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 11c1.657 0 3-1.567 3-3.5S13.657 4 12 4 9 5.567 9 7.5 10.343 11 12 11zm0 0c-3.314 0-6 2.91-6 6.5V19h12v-1.5c0-3.59-2.686-6.5-6-6.5z"/>
+                                    </svg>
+                                    <span>İhlas Marmara Evleri 1.Kısım, Beylikdüzü, İstanbul</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.95.69l1.2 3.6a1 1 0 01-.5 1.2L8.93 9.11A11.05 11.05 0 0014.89 15.07l1.62-1.52a1 1 0 011.2-.5l3.6 1.2a1 1 0 01.69.95V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                    </svg>
+                                    <a href="tel:05073112410" class="hover:text-white transition">0 (507) 311 24 10</a>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.75 5.25L3 6V18L3.75 18.75H20.25L21 18V6L20.25 5.25H3.75ZM4.5 7.6955V17.25H19.5V7.69525L11.9999 14.5136L4.5 7.6955ZM18.3099 6.75H5.68986L11.9999 12.4864L18.3099 6.75Z"/>
+                                    </svg>
+                                    <a href="mailto:info@altayhavuz.com" class="hover:text-white transition">info@altayhavuz.com</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">{{ __('messages.quick_links') }}</h3>
-                    <ul class="space-y-2">
-                        <li><a href="{{ route('home') }}" class="text-gray-400 hover:text-white transition">{{ __('messages.home') }}</a></li>
-                        <li><a href="{{ route('services') }}" class="text-gray-400 hover:text-white transition">{{ __('messages.services') }}</a></li>
-                        <li><a href="{{ route('about') }}" class="text-gray-400 hover:text-white transition">{{ __('messages.about') }}</a></li>
-                        <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white transition">{{ __('messages.contact') }}</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">{{ __('messages.contact') }}</h3>
-                    <ul class="space-y-2 text-gray-400">
-                        <li>{{ __('messages.address') }}: İstanbul, Türkiye</li>
-                        <li>Email: info@altayhavuz.com</li>
-                        <li>Phone: +90 507 311 24 10</li>
-                    </ul>
+                <div class="mt-12 border-t border-white/15 pt-6 text-center text-sm text-blue-50/80">
+                    <p>&copy; {{ date('Y') }} {{ __('messages.app_name') }} · Tüm hakları saklıdır.</p>
                 </div>
             </div>
-
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; {{ date('Y') }} {{ __('messages.app_name') }}. {{ __('messages.all_rights_reserved') }}</p>
-            </div>
-        </div>
-    </footer>
+            <img src="{{ asset('footer02.png') }}" alt="Havuz merdiveni" class="pool-footer-visual">
+        </footer>
+    </section>
 
     <!-- Alpine.js for dropdown menus -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

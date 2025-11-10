@@ -13,7 +13,9 @@
     <!-- Sidebar -->
     <aside class="fixed inset-y-0 left-0 w-72 bg-white/90 backdrop-blur border-r border-slate-200 z-40 hidden md:flex md:flex-col">
         <div class="h-16 flex items-center px-6 border-b">
-            <a href="{{ route('admin.dashboard') }}" class="text-xl font-bold text-blue-700">Altay Havuz Admin</a>
+            <a href="{{ route('admin.dashboard') }}" class="flex items-center">
+                <img src="{{ asset('altayhavuzlogo.png') }}" alt="Altay Havuz" class="h-10 object-contain">
+            </a>
         </div>
         <nav class="flex-1 px-3 py-4 space-y-1">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-blue-700 {{ request()->routeIs('admin.dashboard') ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-slate-700' }}">
@@ -71,7 +73,9 @@
              x-transition:leave-end="-translate-x-full"
              class="fixed inset-y-0 left-0 w-72 bg-white z-40 shadow-xl border-r border-slate-200">
             <div class="h-16 flex items-center justify-between px-4 border-b">
-                <a href="{{ route('admin.dashboard') }}" class="text-lg font-bold text-blue-700">Altay Havuz Admin</a>
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center">
+                    <img src="{{ asset('altayhavuzlogo.png') }}" alt="Altay Havuz" class="h-9 object-contain">
+                </a>
                 <button class="p-2" @click="sidebarOpen=false">
                     <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
@@ -122,15 +126,71 @@
     </div>
 
     <!-- Main -->
+    @php
+        $unreadOffersCount = $unreadOffersCount ?? 0;
+        $recentUnreadOffers = $recentUnreadOffers ?? collect();
+    @endphp
+
     <div class="md:ml-72 flex flex-col min-h-screen">
         <header class="h-16 bg-white/80 backdrop-blur border-b flex items-center justify-between px-4 md:px-6 sticky top-0 z-10">
             <div class="flex items-center gap-3">
                 <button class="md:hidden p-2 rounded hover:bg-slate-100" @click="sidebarOpen=true">
                     <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
-                <div class="font-semibold text-blue-700 md:hidden">Altay Havuz Admin</div>
+                <a href="{{ route('admin.dashboard') }}" class="md:hidden flex items-center">
+                    <img src="{{ asset('altayhavuzlogo.png') }}" alt="Altay Havuz" class="h-8 object-contain">
+                </a>
             </div>
-            <div class="text-sm text-gray-500">{{ session('admin_name', session('admin_email')) }}</div>
+            <div class="flex items-center gap-4">
+                <div class="relative" x-data="{ open:false }" @keydown.escape.window="open=false">
+                    <button class="relative p-2 rounded-full hover:bg-slate-100 transition" @click="open=!open" @click.outside="open=false" aria-expanded="false" aria-haspopup="true">
+                        <svg class="w-6 h-6 {{ $unreadOffersCount ? 'text-blue-600' : 'text-slate-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                        @if($unreadOffersCount)
+                            <span class="absolute -top-1 -right-1 inline-flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[11px] font-semibold text-white">
+                                {{ $unreadOffersCount > 9 ? '9+' : $unreadOffersCount }}
+                            </span>
+                        @endif
+                    </button>
+                    <div
+                        x-cloak
+                        x-show="open"
+                        x-transition
+                        class="absolute right-0 mt-2 w-72 origin-top-right rounded-xl border border-slate-200 bg-white shadow-lg"
+                    >
+                        <div class="flex items-center justify-between px-4 py-3 border-b">
+                            <div class="text-sm font-semibold text-slate-700">Bildirimler</div>
+                            @if($unreadOffersCount)
+                                <span class="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-600">{{ $unreadOffersCount }} yeni</span>
+                            @else
+                                <span class="text-xs text-slate-400">Güncel</span>
+                            @endif
+                        </div>
+                        <div class="max-h-80 overflow-y-auto">
+                            @forelse($recentUnreadOffers as $offer)
+                                <a href="{{ route('admin.offers.index') }}" class="block px-4 py-3 hover:bg-slate-50">
+                                    <div class="text-sm font-semibold text-slate-700">{{ $offer->name }}</div>
+                                    <div class="text-xs text-slate-500">{{ $offer->email }} · {{ $offer->created_at->diffForHumans() }}</div>
+                                    <div class="text-xs text-slate-500">
+                                        {{ $offer->service ? ucfirst($offer->service) : 'Hizmet seçilmedi' }}
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="px-4 py-6 text-center text-sm text-slate-500">
+                                    Yeni teklif bildirimi yok.
+                                </div>
+                            @endforelse
+                        </div>
+                        <div class="border-t">
+                            <a href="{{ route('admin.offers.index') }}" class="block px-4 py-3 text-center text-sm font-medium text-blue-600 hover:bg-blue-50">
+                                Tüm teklifleri görüntüle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-500">{{ session('admin_name', session('admin_email')) }}</div>
+            </div>
         </header>
         <main class="p-4 md:p-8">
             @if(session('success'))

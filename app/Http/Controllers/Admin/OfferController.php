@@ -9,6 +9,8 @@ class OfferController extends Controller
 {
     public function index()
     {
+        Offer::where('is_read', false)->update(['is_read' => true]);
+
         $offers = Offer::latest()->paginate(20);
         return view('admin.offers.index', compact('offers'));
     }
