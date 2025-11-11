@@ -149,7 +149,7 @@
 
         .pool-footer-visual {
             position: absolute;
-            bottom: 0;
+            bottom: clamp(80px, 9vw, 140px);
             right: 0;
             width: clamp(160px, 18vw, 260px);
             pointer-events: none;

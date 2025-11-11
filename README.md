@@ -7,6 +7,20 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Altay Havuz - Laravel Projesi
+
+Bu proje Laravel framework kullanılarak geliştirilmiştir.
+
+## ⚠️ ÖNEMLİ: Hosting'e Deploy Etme
+
+**Resimlerin görünmesi için mutlaka aşağıdaki komutu çalıştırın:**
+
+```bash
+php artisan storage:link
+```
+
+Detaylı deployment rehberi için [DEPLOYMENT.md](DEPLOYMENT.md) dosyasına bakın.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

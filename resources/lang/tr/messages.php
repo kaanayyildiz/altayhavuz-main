@@ -130,4 +130,6 @@ return array (
   'completed_projects_desc' => 'Farklı ölçeklerde başarıyla tamamlanan projeler.',
   'customer_satisfaction_desc' => 'Her projede sürdürülen yüksek memnuniyet.',
   'support_desc' => 'İhtiyaç duyduğunuz her an yanınızdayız.',
+  'no_services' => 'Henüz hizmet eklenmemiştir.',
+  'no_records' => 'Henüz içerik eklenmemiştir.',
 );

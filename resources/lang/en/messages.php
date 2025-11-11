@@ -130,4 +130,6 @@ return array (
   'completed_projects_desc' => 'Projects delivered successfully at various scales.',
   'customer_satisfaction_desc' => 'Consistently high satisfaction on every project.',
   'support_desc' => 'We are here whenever you need us.',
+  'no_services' => 'No services have been added yet.',
+  'no_records' => 'No content has been added yet.',
 );

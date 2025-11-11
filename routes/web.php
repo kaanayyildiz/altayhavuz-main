@@ -15,6 +15,11 @@ use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\PortfolioCategoryController as AdminPortfolioCategoryController;
 use App\Http\Controllers\Admin\MenuController as AdminMenuController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\WhyChooseUsController;
+use App\Http\Controllers\Admin\CoreValueController;
+use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\Admin\HomeMissionVisionController;
 use App\Http\Controllers\Admin\LanguageController as AdminLanguageController;
 use App\Http\Controllers\Admin\SeoController as AdminSeoController;
 use App\Http\Controllers\OfferController;
@@ -66,6 +71,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('offers/bulk-delete', [AdminOfferController::class, 'bulkDelete'])->name('offers.bulkDelete');
         Route::resource('menus', AdminMenuController::class)->except(['show']);
         Route::post('menus/reorder', [AdminMenuController::class, 'reorder'])->name('menus.reorder');
+        Route::resource('services', AdminServiceController::class)->except(['show']);
+        Route::post('services/reorder', [AdminServiceController::class, 'reorder'])->name('services.reorder');
+
+        Route::prefix('home')->name('home.')->group(function () {
+            Route::resource('why', WhyChooseUsController::class)->except(['show']);
+            Route::post('why/reorder', [WhyChooseUsController::class, 'reorder'])->name('why.reorder');
+
+            Route::resource('core-values', CoreValueController::class)->parameters([
+                'core-values' => 'core_value',
+            ])->except(['show']);
+            Route::post('core-values/reorder', [CoreValueController::class, 'reorder'])->name('core-values.reorder');
+
+            Route::resource('faqs', AdminFaqController::class)->parameters([
+                'faqs' => 'faq',
+            ])->except(['show']);
+            Route::post('faqs/reorder', [AdminFaqController::class, 'reorder'])->name('faqs.reorder');
+
+            Route::get('mission-vision', [HomeMissionVisionController::class, 'edit'])->name('mission.edit');
+            Route::put('mission-vision', [HomeMissionVisionController::class, 'update'])->name('mission.update');
+        });
 
         Route::get('settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
         Route::post('settings', [AdminSettingController::class, 'update'])->name('settings.update');

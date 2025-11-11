@@ -251,74 +251,28 @@
                     <h2 class="text-4xl md:text-5xl font-bold text-gray-800">{{ __('messages.why_choose_us_tab') }}</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Feature 1 -->
-                    <div class="bg-white p-6 rounded-lg">
-                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">{{ __('messages.years_service') }}</h3>
-                        <p class="text-gray-600">{{ __('messages.years_service_desc') }}</p>
+                @if($whyChooseUsItems->isNotEmpty())
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        @foreach($whyChooseUsItems as $item)
+                            @php($iconConfig = $item->icon_config)
+                            <div class="bg-white p-6 rounded-lg">
+                                <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        @foreach($iconConfig['paths'] as $path)
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $path }}"></path>
+                                        @endforeach
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-3">{{ $item->localized_title }}</h3>
+                                <p class="text-gray-600">{{ $item->localized_description }}</p>
+                            </div>
+                        @endforeach
                     </div>
-
-                    <!-- Feature 2 -->
-                    <div class="bg-white p-6 rounded-lg">
-                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">{{ __('messages.quality_guarantee') }}</h3>
-                        <p class="text-gray-600">{{ __('messages.quality_guarantee_desc') }}</p>
+                @else
+                    <div class="bg-white rounded-lg shadow-sm p-8 text-center text-gray-500">
+                        {{ __('messages.no_records') }}
                     </div>
-
-                    <!-- Feature 3 -->
-                    <div class="bg-white p-6 rounded-lg">
-                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">{{ __('messages.experienced_technicians') }}</h3>
-                        <p class="text-gray-600">{{ __('messages.experienced_technicians_desc') }}</p>
-                    </div>
-
-                    <!-- Feature 4 -->
-                    <div class="bg-white p-6 rounded-lg">
-                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">{{ __('messages.expert_repairs') }}</h3>
-                        <p class="text-gray-600">{{ __('messages.expert_repairs_desc') }}</p>
-                    </div>
-
-                    <!-- Feature 5 -->
-                    <div class="bg-white p-6 rounded-lg">
-                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">{{ __('messages.total_clean') }}</h3>
-                        <p class="text-gray-600">{{ __('messages.total_clean_desc') }}</p>
-                    </div>
-
-                    <!-- Feature 6 -->
-                    <div class="bg-white p-6 rounded-lg">
-                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-3">{{ __('messages.request_estimate') }}</h3>
-                        <p class="text-gray-600">{{ __('messages.request_estimate_desc') }}</p>
-                    </div>
-                </div>
+                @endif
             </div>
 
             <!-- Tab Content: Mission & Vision -->
@@ -328,7 +282,7 @@
                  x-transition:enter-end="opacity-100 transform translate-y-0"
                  class="mb-12">
                 <div class="text-center mb-12">
-                    <p class="text-blue-500 text-sm font-medium mb-2">{{ __('messages.understanding_customers') }}</p>
+                    <p class="text-blue-500 text-sm font-medium mb-2">{{ $missionVision->localized_tagline ?: __('messages.understanding_customers') }}</p>
                     <h2 class="text-4xl md:text-5xl font-bold text-gray-800">{{ __('messages.mission_vision_tab') }}</h2>
                 </div>
 
@@ -336,39 +290,35 @@
                     <!-- Left Column -->
                     <div class="space-y-8">
                         <div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ __('messages.mission_statement') }}</h3>
-                            <p class="text-gray-600 leading-relaxed">{{ __('messages.mission_content') }}</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ $missionVision->localized_mission_title ?: __('messages.mission_statement') }}</h3>
+                            <p class="text-gray-600 leading-relaxed">{{ $missionVision->localized_mission_description ?: __('messages.mission_content') }}</p>
                         </div>
 
                         <div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ __('messages.vision_statement') }}</h3>
-                            <p class="text-gray-600 leading-relaxed">{{ __('messages.vision_content') }}</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">{{ $missionVision->localized_vision_title ?: __('messages.vision_statement') }}</h3>
+                            <p class="text-gray-600 leading-relaxed">{{ $missionVision->localized_vision_description ?: __('messages.vision_content') }}</p>
                         </div>
                     </div>
 
                     <!-- Right Column -->
                     <div>
                         <h3 class="text-2xl font-bold text-gray-800 mb-6">{{ __('messages.core_values') }}</h3>
-                        <ul class="space-y-4">
-                            <li class="flex items-start">
-                                <svg class="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                                <p class="text-gray-600">{{ __('messages.core_value_1') }}</p>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                                <p class="text-gray-600">{{ __('messages.core_value_2') }}</p>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                                <p class="text-gray-600">{{ __('messages.core_value_3') }}</p>
-                            </li>
-                        </ul>
+                        @if($coreValues->isNotEmpty())
+                            <ul class="space-y-4">
+                                @foreach($coreValues as $value)
+                                    <li class="flex items-start">
+                                        <svg class="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                        <p class="text-gray-600">{{ $value->localized_text }}</p>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <div class="bg-blue-50 rounded-lg p-6 text-blue-700 text-sm">
+                                {{ __('messages.no_records') }}
+                            </div>
+                        @endif
 
                         <!-- Illustration Placeholder -->
                         <div class="mt-8 bg-blue-50 rounded-lg p-8 flex items-center justify-center h-64">
@@ -391,121 +341,34 @@
                     <h2 class="text-4xl md:text-5xl font-bold text-gray-800">{{ __('messages.popular_questions_tab') }}</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div x-data="{ open: false }" class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <button @click="open = !open" class="w-full flex items-center justify-between text-left">
-                            <h3 class="text-lg font-bold text-gray-800">{{ __('messages.faq_1') }}</h3>
-                            <svg class="w-5 h-5 text-gray-600 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 max-h-0"
-                             x-transition:enter-end="opacity-100 max-h-96"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 max-h-96"
-                             x-transition:leave-end="opacity-0 max-h-0"
-                             class="mt-4 text-gray-600 overflow-hidden">
-                            <p>{{ __('messages.faq_1_answer') }}</p>
-                        </div>
+                @if($faqs->isNotEmpty())
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach($faqs as $faq)
+                            <div x-data="{ open: false }" class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                                <button @click="open = !open" class="w-full flex items-center justify-between text-left">
+                                    <h3 class="text-lg font-bold text-gray-800">{{ $faq->localized_question }}</h3>
+                                    <svg class="w-5 h-5 text-gray-600 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                                <div x-show="open"
+                                     x-transition:enter="transition ease-out duration-200"
+                                     x-transition:enter-start="opacity-0 max-h-0"
+                                     x-transition:enter-end="opacity-100 max-h-96"
+                                     x-transition:leave="transition ease-in duration-200"
+                                     x-transition:leave-start="opacity-100 max-h-96"
+                                     x-transition:leave-end="opacity-0 max-h-0"
+                                     class="mt-4 text-gray-600 overflow-hidden">
+                                    <p>{{ $faq->localized_answer }}</p>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-
-                    <div x-data="{ open: false }" class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <button @click="open = !open" class="w-full flex items-center justify-between text-left">
-                            <h3 class="text-lg font-bold text-gray-800">{{ __('messages.faq_2') }}</h3>
-                            <svg class="w-5 h-5 text-gray-600 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 max-h-0"
-                             x-transition:enter-end="opacity-100 max-h-96"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 max-h-96"
-                             x-transition:leave-end="opacity-0 max-h-0"
-                             class="mt-4 text-gray-600 overflow-hidden">
-                            <p>{{ __('messages.faq_2_answer') }}</p>
-                        </div>
+                @else
+                    <div class="bg-white rounded-lg shadow-sm p-8 text-center text-gray-500">
+                        {{ __('messages.no_records') }}
                     </div>
-
-                    <div x-data="{ open: false }" class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <button @click="open = !open" class="w-full flex items-center justify-between text-left">
-                            <h3 class="text-lg font-bold text-gray-800">{{ __('messages.faq_3') }}</h3>
-                            <svg class="w-5 h-5 text-gray-600 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 max-h-0"
-                             x-transition:enter-end="opacity-100 max-h-96"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 max-h-96"
-                             x-transition:leave-end="opacity-0 max-h-0"
-                             class="mt-4 text-gray-600 overflow-hidden">
-                            <p>{{ __('messages.faq_3_answer') }}</p>
-                        </div>
-                    </div>
-
-                    <div x-data="{ open: false }" class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <button @click="open = !open" class="w-full flex items-center justify-between text-left">
-                            <h3 class="text-lg font-bold text-gray-800">{{ __('messages.faq_4') }}</h3>
-                            <svg class="w-5 h-5 text-gray-600 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 max-h-0"
-                             x-transition:enter-end="opacity-100 max-h-96"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 max-h-96"
-                             x-transition:leave-end="opacity-0 max-h-0"
-                             class="mt-4 text-gray-600 overflow-hidden">
-                            <p>{{ __('messages.faq_4_answer') }}</p>
-                        </div>
-                    </div>
-
-                    <div x-data="{ open: false }" class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <button @click="open = !open" class="w-full flex items-center justify-between text-left">
-                            <h3 class="text-lg font-bold text-gray-800">{{ __('messages.faq_5') }}</h3>
-                            <svg class="w-5 h-5 text-gray-600 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 max-h-0"
-                             x-transition:enter-end="opacity-100 max-h-96"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 max-h-96"
-                             x-transition:leave-end="opacity-0 max-h-0"
-                             class="mt-4 text-gray-600 overflow-hidden">
-                            <p>{{ __('messages.faq_5_answer') }}</p>
-                        </div>
-                    </div>
-
-                    <div x-data="{ open: false }" class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <button @click="open = !open" class="w-full flex items-center justify-between text-left">
-                            <h3 class="text-lg font-bold text-gray-800">{{ __('messages.faq_6') }}</h3>
-                            <svg class="w-5 h-5 text-gray-600 transition-transform" :class="open ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                        <div x-show="open"
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 max-h-0"
-                             x-transition:enter-end="opacity-100 max-h-96"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 max-h-96"
-                             x-transition:leave-end="opacity-0 max-h-0"
-                             class="mt-4 text-gray-600 overflow-hidden">
-                            <p>{{ __('messages.faq_6_answer') }}</p>
-                        </div>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>
@@ -518,47 +381,41 @@
                 <p class="text-xl text-gray-600">{{ __('messages.our_services_subtitle') }}</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
-                    <div class="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ __('messages.pool_design') }}</h3>
-                    <p class="text-gray-600">{{ __('messages.pool_design_desc') }}</p>
+            @if(isset($services) && $services->isNotEmpty())
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    @foreach($services as $service)
+                        @php($iconConfig = $service->icon_config)
+                        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
+                            <div class="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    @foreach($iconConfig['paths'] as $path)
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $path }}"></path>
+                                    @endforeach
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $service->localized_title }}</h3>
+                            <p class="text-gray-600">{{ $service->localized_description }}</p>
+                            @php($features = $service->localized_features)
+                            @if(!empty($features))
+                                <ul class="mt-4 space-y-2 text-gray-600">
+                                    @foreach($features as $feature)
+                                        <li class="flex items-start gap-2">
+                                            <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span>{{ $feature }}</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </div>
+                    @endforeach
                 </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
-                    <div class="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ __('messages.pool_construction') }}</h3>
-                    <p class="text-gray-600">{{ __('messages.pool_construction_desc') }}</p>
+            @else
+                <div class="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
+                    {{ __('messages.no_services') }}
                 </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
-                    <div class="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ __('messages.pool_maintenance') }}</h3>
-                    <p class="text-gray-600">{{ __('messages.pool_maintenance_desc') }}</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
-                    <div class="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ __('messages.pool_renovation') }}</h3>
-                    <p class="text-gray-600">{{ __('messages.pool_renovation_desc') }}</p>
-                </div>
-            </div>
+            @endif
 
             <div class="text-center mt-12">
                 <a href="{{ route('services') }}" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
