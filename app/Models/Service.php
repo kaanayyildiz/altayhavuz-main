@@ -19,6 +19,11 @@ class Service extends Model
         'icon',
         'order',
         'status',
+        'show_on_home',
+    ];
+
+    protected $casts = [
+        'show_on_home' => 'boolean',
     ];
 
     public const ICONS = [

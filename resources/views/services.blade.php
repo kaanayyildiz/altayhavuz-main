@@ -17,15 +17,7 @@
             @if(isset($services) && $services->isNotEmpty())
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                     @foreach($services as $service)
-                        @php($iconConfig = $service->icon_config)
                         <div class="bg-gray-50 p-8 rounded-lg shadow-sm hover:shadow-md transition">
-                            <div class="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-                                <svg class="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    @foreach($iconConfig['paths'] as $path)
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $path }}"></path>
-                                    @endforeach
-                                </svg>
-                            </div>
                             <h2 class="text-2xl font-bold text-gray-800 mb-4">{{ $service->localized_title }}</h2>
                             <p class="text-gray-600 mb-4">{{ $service->localized_description }}</p>
                             @php($features = $service->localized_features)

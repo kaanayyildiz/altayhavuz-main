@@ -376,40 +376,174 @@
     <!-- Services Section -->
     <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{{ __('messages.our_services') }}</h2>
-                <p class="text-xl text-gray-600">{{ __('messages.our_services_subtitle') }}</p>
-            </div>
-
             @if(isset($services) && $services->isNotEmpty())
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    @foreach($services as $service)
-                        @php($iconConfig = $service->icon_config)
-                        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition">
-                            <div class="w-16 h-16 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    @foreach($iconConfig['paths'] as $path)
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $path }}"></path>
-                                    @endforeach
-                                </svg>
+                <div
+                    x-data="{
+                        services: @js($services->map(fn($service) => [
+                            'id' => $service->id,
+                            'title' => $service->localized_title,
+                            'description' => $service->localized_description,
+                            'features' => $service->localized_features ?? [],
+                        ])->values()),
+                        centerIndex: 0,
+                        startX: 0,
+                        isDragging: false,
+                        init(){},
+                        prev(){
+                            if(this.services.length <= 1) return;
+                            this.centerIndex = (this.centerIndex - 1 + this.services.length) % this.services.length;
+                        },
+                        next(){
+                            if(this.services.length <= 1) return;
+                            this.centerIndex = (this.centerIndex + 1) % this.services.length;
+                        },
+                        go(idx){
+                            if(idx === this.centerIndex) return;
+                            this.centerIndex = idx;
+                        },
+                        handleTouchStart(event){
+                            this.startX = event.touches[0].clientX;
+                            this.isDragging = true;
+                        },
+                        handleTouchEnd(event){
+                            if(!this.isDragging) return;
+                            const endX = event.changedTouches[0].clientX;
+                            const diffX = this.startX - endX;
+                            if(Math.abs(diffX) > 50){
+                                diffX > 0 ? this.next() : this.prev();
+                            }
+                            this.isDragging = false;
+                        },
+                        handleMouseDown(event){
+                            this.startX = event.clientX;
+                            this.isDragging = true;
+                        },
+                        handleMouseUp(event){
+                            if(!this.isDragging) return;
+                            const endX = event.clientX;
+                            const diffX = this.startX - endX;
+                            if(Math.abs(diffX) > 60){
+                                diffX > 0 ? this.next() : this.prev();
+                            }
+                            this.isDragging = false;
+                        },
+                        getPosition(index){
+                            const total = this.services.length;
+                            if(total === 0) return 2;
+                            if(total === 1){
+                                return index === this.centerIndex ? 0 : 2;
+                            }
+                            if(total === 2){
+                                if(index === this.centerIndex) return 0;
+                                const next = (this.centerIndex + 1) % total;
+                                return index === next ? 1 : 2;
+                            }
+                            const prev = (this.centerIndex - 1 + total) % total;
+                            const next = (this.centerIndex + 1) % total;
+                            if(index === this.centerIndex) return 0;
+                            if(index === prev) return -1;
+                            if(index === next) return 1;
+                            return 2;
+                        },
+                        styleFor(index){
+                            const position = this.getPosition(index);
+                            const offset = position * 260;
+                            const scale = position === 0 ? 1 : 0.9;
+                            const opacity = Math.abs(position) <= 1 ? 1 : 0;
+                            const pointer = Math.abs(position) <= 1 ? 'auto' : 'none';
+                            const z = position === 0 ? 40 : Math.abs(position) === 1 ? 30 : 10;
+                            return `
+                                transform: translate(-50%, -50%) translateX(${offset}px) scale(${scale});
+                                opacity: ${opacity};
+                                pointer-events: ${pointer};
+                                z-index: ${z};
+                                transition: transform 450ms ease, opacity 450ms ease;
+                            `;
+                        }
+                    }"
+                    class="relative"
+                >
+                    <div class="grid lg:grid-cols-[minmax(0,360px)_1fr] gap-10 items-center">
+                        <div class="bg-blue-700 text-white rounded-[36px] p-10 lg:h-full flex flex-col justify-between gap-10 relative overflow-hidden shadow-2xl">
+                            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.6),_transparent_65%)]"></div>
+                            <div class="relative space-y-6">
+                                <div class="space-y-3">
+                                    <p class="text-xs uppercase tracking-[0.35em] text-blue-100/80">{{ __('messages.our_services') }}</p>
+                                    <h3 class="text-3xl lg:text-4xl font-bold leading-tight">{{ __('messages.our_services') }}</h3>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $service->localized_title }}</h3>
-                            <p class="text-gray-600">{{ $service->localized_description }}</p>
-                            @php($features = $service->localized_features)
-                            @if(!empty($features))
-                                <ul class="mt-4 space-y-2 text-gray-600">
-                                    @foreach($features as $feature)
-                                        <li class="flex items-start gap-2">
-                                            <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                            </svg>
-                                            <span>{{ $feature }}</span>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            @endif
+                            <div class="relative flex items-center gap-3">
+                                <button
+                                    @click="prev"
+                                    class="w-12 h-12 rounded-full border border-white/30 text-white hover:bg-white/15 transition flex items-center justify-center"
+                                    aria-label="Previous service"
+                                >
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </button>
+                                <button
+                                    @click="next"
+                                    class="w-12 h-12 rounded-full border border-white/30 text-white hover:bg-white/15 transition flex items-center justify-center"
+                                    aria-label="Next service"
+                                >
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                    @endforeach
+
+                        <div
+                            class="relative min-h-[420px] md:min-h-[460px]"
+                            @touchstart="handleTouchStart($event)"
+                            @touchend="handleTouchEnd($event)"
+                            @mousedown.prevent="handleMouseDown($event)"
+                            @mouseup="handleMouseUp($event)"
+                            @mouseleave="isDragging = false"
+                        >
+                            <div class="absolute inset-0 -z-10 rounded-[40px] bg-gradient-to-br from-blue-50 via-white to-white shadow-[0_35px_80px_-60px_rgba(37,99,235,0.45)]"></div>
+                            <template x-for="(service, index) in services" :key="service.id">
+                                <div
+                                    class="absolute top-1/2 left-1/2 w-full max-w-xs sm:max-w-sm lg:max-w-md bg-white rounded-[32px] px-6 sm:px-8 pt-6 pb-10 flex flex-col"
+                                    :class="getPosition(index) === 0 ? 'shadow-2xl border border-blue-100' : 'shadow-md/80'"
+                                    :style="styleFor(index)"
+                                >
+                                    <div class="relative h-40 sm:h-44 rounded-2xl bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 overflow-hidden">
+                                        <div class="absolute inset-0 opacity-45 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.35),_transparent_65%)]"></div>
+                                        <div class="absolute bottom-4 left-4 inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white font-semibold text-sm" x-text="String(index + 1).padStart(2, '0')"></div>
+                                    </div>
+                                    <div class="mt-6 flex-1 flex flex-col">
+                                        <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2" x-text="service.title"></h3>
+                                        <p class="text-gray-600 flex-1" x-text="service.description"></p>
+                                        <template x-if="service.features && service.features.length">
+                                            <ul class="mt-5 space-y-2 text-gray-600 text-sm">
+                                                <template x-for="(feature, featureIdx) in service.features.slice(0,3)" :key="`card-feature-${featureIdx}`">
+                                                    <li class="flex items-start gap-2">
+                                                        <svg class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        <span x-text="feature"></span>
+                                                    </li>
+                                                </template>
+                                            </ul>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center mt-10 gap-2">
+                        <template x-for="(service, dotIdx) in services" :key="`dot-${service.id}-${dotIdx}`">
+                            <button
+                                @click="go(dotIdx)"
+                                class="transition-all rounded-full"
+                                :class="centerIndex === dotIdx ? 'w-3 h-3 bg-blue-600' : 'w-2 h-2 bg-gray-300 hover:bg-blue-200'"
+                                aria-label="Go to service"
+                            ></button>
+                        </template>
+                    </div>
                 </div>
             @else
                 <div class="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">
@@ -556,7 +690,7 @@
                         @csrf
                         <!-- Name -->
                         <div>
-                            <input type="text" name="name"
+                            <input type="text" name="name" required
                                    placeholder="{{ __('messages.your_name') }}"
                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
@@ -564,12 +698,12 @@
                         <!-- Email & Phone -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <input type="email" name="email"
+                                <input type="email" name="email" required
                                        placeholder="{{ __('messages.e_mail') }}"
                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             </div>
                             <div>
-                                <input type="tel" name="phone"
+                                <input type="tel" name="phone" required
                                        placeholder="{{ __('messages.phone_number') }}"
                                        class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             </div>

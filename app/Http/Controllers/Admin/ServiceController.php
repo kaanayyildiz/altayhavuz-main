@@ -18,15 +18,12 @@ class ServiceController extends Controller
     public function create()
     {
         $service = new Service();
-        $iconOptions = Service::iconOptions();
 
-        return view('admin.services.create', compact('service', 'iconOptions'));
+        return view('admin.services.create', compact('service'));
     }
 
     public function store(Request $request)
     {
-        $iconKeys = implode(',', array_keys(Service::iconOptions()));
-
         $validated = $request->validate([
             'title_tr' => 'required|string|max:255',
             'title_en' => 'nullable|string|max:255',
@@ -34,12 +31,13 @@ class ServiceController extends Controller
             'description_en' => 'nullable|string',
             'features_tr' => 'nullable|string',
             'features_en' => 'nullable|string',
-            'icon' => "required|string|in:{$iconKeys}",
             'order' => 'nullable|integer|min:0',
             'status' => 'required|in:active,passive',
+            'show_on_home' => 'nullable|boolean',
         ]);
 
         $validated['order'] = $validated['order'] ?? (Service::max('order') + 1);
+        $validated['show_on_home'] = $request->has('show_on_home') ? $request->boolean('show_on_home') : true;
 
         Service::create($validated);
 
@@ -48,15 +46,11 @@ class ServiceController extends Controller
 
     public function edit(Service $service)
     {
-        $iconOptions = Service::iconOptions();
-
-        return view('admin.services.edit', compact('service', 'iconOptions'));
+        return view('admin.services.edit', compact('service'));
     }
 
     public function update(Request $request, Service $service)
     {
-        $iconKeys = implode(',', array_keys(Service::iconOptions()));
-
         $validated = $request->validate([
             'title_tr' => 'required|string|max:255',
             'title_en' => 'nullable|string|max:255',
@@ -64,12 +58,13 @@ class ServiceController extends Controller
             'description_en' => 'nullable|string',
             'features_tr' => 'nullable|string',
             'features_en' => 'nullable|string',
-            'icon' => "required|string|in:{$iconKeys}",
             'order' => 'nullable|integer|min:0',
             'status' => 'required|in:active,passive',
+            'show_on_home' => 'nullable|boolean',
         ]);
 
         $validated['order'] = $validated['order'] ?? $service->order;
+        $validated['show_on_home'] = $request->boolean('show_on_home');
 
         $service->update($validated);
 

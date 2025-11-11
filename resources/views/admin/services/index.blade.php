@@ -17,35 +17,28 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taşı</th>
-                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Simge</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Başlık (TR)</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Başlık (EN)</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sıra</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durum</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Anasayfa</th>
                     <th class="px-4 py-3"></th>
                 </tr>
             </thead>
             <tbody id="sortableServiceBody" class="divide-y divide-gray-200">
                 @forelse($services as $service)
-                    @php($iconConfig = $service->icon_config)
                     <tr data-id="{{ $service->id }}" class="hover:bg-gray-50">
                         <td class="px-4 py-3 cursor-move select-none text-gray-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 10h16M4 14h16"/></svg>
-                        </td>
-                        <td class="px-4 py-3">
-                            <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    @foreach($iconConfig['paths'] as $path)
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $path }}"></path>
-                                    @endforeach
-                                </svg>
-                            </div>
                         </td>
                         <td class="px-4 py-3 text-gray-800 font-medium">{{ $service->title_tr ?: '—' }}</td>
                         <td class="px-4 py-3 text-gray-600">{{ $service->title_en ?: '—' }}</td>
                         <td class="px-4 py-3 text-gray-700">{{ $service->order }}</td>
                         <td class="px-4 py-3">
                             <span class="px-2 py-1 text-xs rounded {{ $service->status === 'active' ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-700' }}">{{ $service->status }}</span>
+                        </td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-1 text-xs rounded {{ $service->show_on_home ? 'bg-blue-50 text-blue-700' : 'bg-gray-100 text-gray-500' }}">{{ $service->show_on_home ? 'Evet' : 'Hayır' }}</span>
                         </td>
                         <td class="px-4 py-3 text-right space-x-2 whitespace-nowrap">
                             <a href="{{ route('admin.services.edit', $service) }}" class="text-blue-600 hover:underline">Düzenle</a>
