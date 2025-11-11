@@ -468,7 +468,7 @@
                             <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.6),_transparent_65%)]"></div>
                             <div class="relative space-y-6">
                                 <div class="space-y-3">
-                                    <p class="text-xs uppercase tracking-[0.35em] text-blue-100/80">{{ __('messages.our_services') }}</p>
+                                    <p class="text-xs uppercase tracking-[0.35em] text-blue-100/80">Öne Çıkan</p>
                                     <h3 class="text-3xl lg:text-4xl font-bold leading-tight">{{ __('messages.our_services') }}</h3>
                                 </div>
                             </div>
