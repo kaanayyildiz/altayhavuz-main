@@ -386,9 +386,27 @@
                             'features' => $service->localized_features ?? [],
                         ])->values()),
                         centerIndex: 0,
+                        windowWidth: typeof window !== 'undefined' ? window.innerWidth : 1280,
+                        offsetBase: 0,
                         startX: 0,
                         isDragging: false,
-                        init(){},
+                        init(){
+                            this.updateDimensions();
+                        },
+                        updateDimensions(){
+                            this.windowWidth = typeof window !== 'undefined' ? window.innerWidth : this.windowWidth;
+                            if(this.windowWidth >= 1536){
+                                this.offsetBase = 320;
+                            }else if(this.windowWidth >= 1280){
+                                this.offsetBase = 300;
+                            }else if(this.windowWidth >= 1024){
+                                this.offsetBase = 260;
+                            }else if(this.windowWidth >= 768){
+                                this.offsetBase = 200;
+                            }else{
+                                this.offsetBase = 0;
+                            }
+                        },
                         prev(){
                             if(this.services.length <= 1) return;
                             this.centerIndex = (this.centerIndex - 1 + this.services.length) % this.services.length;
@@ -446,19 +464,25 @@
                             return 2;
                         },
                         styleFor(index){
+                            const isMobile = this.windowWidth < 768;
                             const position = this.getPosition(index);
-                            const offset = position * 260;
-                            const scale = position === 0 ? 1 : 0.9;
-                            const opacity = Math.abs(position) <= 1 ? 1 : 0;
-                            const pointer = Math.abs(position) <= 1 ? 'auto' : 'none';
-                            const z = position === 0 ? 40 : Math.abs(position) === 1 ? 30 : 10;
-                            return `
+                            const offset = position * this.offsetBase;
+                            const scale = position === 0 ? 1 : (isMobile ? 0.98 : 0.9);
+                            const isVisible = isMobile ? index === this.centerIndex : Math.abs(position) <= 1;
+                            const opacity = isVisible ? 1 : 0;
+                            const pointer = isVisible ? 'auto' : 'none';
+                            const z = index === this.centerIndex ? 40 : (isMobile ? 20 : (Math.abs(position) === 1 ? 30 : 10));
+                            let style = `
                                 transform: translate(-50%, -50%) translateX(${offset}px) scale(${scale});
                                 opacity: ${opacity};
                                 pointer-events: ${pointer};
                                 z-index: ${z};
                                 transition: transform 450ms ease, opacity 450ms ease;
                             `;
+                            if(isMobile){
+                                style += ' width: min(100%, 320px);';
+                            }
+                            return style;
                         }
                     }"
                     class="relative"
@@ -501,6 +525,7 @@
                             @mousedown.prevent="handleMouseDown($event)"
                             @mouseup="handleMouseUp($event)"
                             @mouseleave="isDragging = false"
+                            @resize.window="updateDimensions()"
                         >
                             <div class="absolute inset-0 -z-10 rounded-[40px] bg-gradient-to-br from-blue-50 via-white to-white shadow-[0_35px_80px_-60px_rgba(37,99,235,0.45)]"></div>
                             <template x-for="(service, index) in services" :key="service.id">
